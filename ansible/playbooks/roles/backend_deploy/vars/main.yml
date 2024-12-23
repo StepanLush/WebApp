@@ -1,0 +1,3 @@
+---
+backend_app_path: /var/www/node_app
+backend_start_command: "pm2 start server.js --name currency_converter"

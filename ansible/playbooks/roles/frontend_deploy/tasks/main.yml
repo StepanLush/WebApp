@@ -1,0 +1,43 @@
+---
+- name: Clone React app from GitHub
+  git:
+    repo: "https://github.com/StepanLush/currency-converter-frontend.git"
+    dest: /tmp/react_app
+    force: yes
+
+- name: Copy .env file to frontend directory
+  copy:
+    src: templates/.env
+    dest: /tmp/react_app/.env
+    owner: www-data
+    group: www-data
+    mode: 0644
+
+- name: Install dependencies for React app
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use 16 && npm install
+  args:
+    chdir: /tmp/react_app
+
+- name: Build React app with Node.js 16
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm install 16 && nvm use 16 && npm run build
+  args:
+    chdir: /tmp/react_app
+
+- name: Copy React build files
+  copy:
+    src: /tmp/react_app/build/
+    dest: /var/www/react_app/
+    owner: www-data
+    group: www-data
+    mode: 0755
+    remote_src: yes
+
+
+- name: Ensure Nginx is running
+  service:
+    name: nginx
+    state: started

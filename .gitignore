@@ -1,0 +1,10 @@
+terraform/terraform.tfvars
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/TODO
+
+ansible/hosts
+ansible/playbooks/roles/backend_deploy/templates/.env
+ansible/playbooks/roles/frontend_deploy/templates/.env
+ansible/playbooks/roles/monitoring_install/vars/main.yml
+ansible/playbooks/fetch/fetch_secrets/defaults/main.yml

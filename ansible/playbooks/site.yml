@@ -1,0 +1,23 @@
+---
+- name: Prepare and deploy frontend
+  hosts: frontend
+  become: yes
+  roles:
+    - role: frontend_setup
+    - role: frontend_deploy
+
+- name: Prepare and deploy backend
+  hosts: backend
+  become: yes
+  roles:
+    - role: backend_setup
+    - role: backend_deploy
+
+- name: Install Prometheus
+  hosts: monitoring
+  become: yes
+  roles:
+    - role: monitoring_install
+  vars_files:
+    - WebApp/ansible/playbooks/roles/monitoring_install/vars/main.yml
+

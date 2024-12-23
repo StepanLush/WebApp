@@ -1,0 +1,29 @@
+---
+- name: Clone backend app from GitHub
+  git:
+    repo: "https://github.com/StepanLush/currency-converter-backend.git"
+    dest: /var/www/node_app
+    force: yes
+
+- name: Install backend dependencies
+  command: npm install
+  args:
+    chdir: /var/www/node_app
+
+- name: Copy .env file to backend directory
+  copy:
+    src: templates/.env
+    dest: /var/www/node_app/.env
+    owner: www-data
+    group: www-data
+    mode: 0644
+
+- name: Install Prometheus client for Node.js
+  npm:
+    name: prom-client
+    path: /var/www/node_app
+
+- name: Start backend with PM2
+  command: pm2 start server.js --name currency_converter -f
+  args:
+    chdir: /var/www/node_app

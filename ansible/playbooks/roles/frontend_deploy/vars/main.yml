@@ -1,0 +1,3 @@
+---
+frontend_app_path: /var/www/react_app
+ansible_user: stepan

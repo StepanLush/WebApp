@@ -1,0 +1,29 @@
+---
+- name: Install required dependencies for Node.js
+  apt:
+    name: curl
+    state: present
+
+- name: Remove old npm package
+  apt:
+    name: npm
+    state: absent
+
+- name: Add Node.js PPA (Personal Package Archive)
+  shell: curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+
+- name: Install Node.js
+  apt:
+    name:
+      - nodejs
+    state: present
+
+- name: Install npm using npm
+  shell: |
+    curl -L https://www.npmjs.com/install.sh | sh
+
+- name: Install PM2 globally
+  npm:
+    name: pm2
+    global: yes
+

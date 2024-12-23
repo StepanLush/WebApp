@@ -1,0 +1,92 @@
+---
+- name: Fetch Ansible inventory from Key Vault
+  azure_rm_keyvaultsecret:
+    keyvault_uri: "https://{{ key_vault_name }}.vault.azure.net/"
+    secret_name: "ansible-inventory"
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_client_secret }}"
+    tenant: "{{ azure_tenant_id }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    state: present
+    secret_value: ""
+  register: ansible_inventory_secret
+
+- name: Debug ansible_inventory_secret
+  debug:
+    var: ansible_inventory_secret.state.secret_value
+
+- name: Write Ansible inventory to file
+  copy:
+    content: "{{ ansible_inventory_secret.state.secret_value }}"
+    dest: "/home/stepan/WebApp/ansible/hosts"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Fetch targets_vms_ips from Key Vault
+  azure_rm_keyvaultsecret:
+    keyvault_uri: "https://{{ key_vault_name }}.vault.azure.net/"
+    secret_name: "targets-vms-ips"
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_client_secret }}"
+    tenant: "{{ azure_tenant_id }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    state: present
+    secret_value: ""
+  register: targets_vms_ips
+
+- name: Write targets_vms_ips to file
+  copy:
+    content: "{{ targets_vms_ips.state.secret_value }}"
+    dest: "/home/stepan/WebApp/ansible/playbooks/roles/monitoring_install/vars/main.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Fetch Load Balancer IP from Key Vault
+  azure_rm_keyvaultsecret:
+    keyvault_uri: "https://{{ key_vault_name }}.vault.azure.net/"
+    secret_name: "load-balancer-ip"
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_client_secret }}"
+    tenant: "{{ azure_tenant_id }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    state: present
+    secret_value: ""
+  register: lb_ip_secret
+
+- name: Debug lb_ip_secret
+  debug:
+    var: lb_ip_secret.state.secret_value
+
+- name: Write Load Balancer IP to frontend .env
+  copy:
+    content: "REACT_APP_API_URL=http://{{ lb_ip_secret.state.secret_value }}"
+    dest: "/home/stepan/WebApp/ansible/playbooks/roles/frontend_deploy/templates/.env"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Fetch API key from Key Vault
+  azure_rm_keyvaultsecret:
+    keyvault_uri: "https://{{ key_vault_name }}.vault.azure.net/"
+    secret_name: "api-key"
+    client_id: "{{ azure_client_id }}"
+    secret: "{{ azure_client_secret }}"
+    tenant: "{{ azure_tenant_id }}"
+    subscription_id: "{{ azure_subscription_id }}"
+    state: present
+    secret_value: ""
+  register: api_key_secret
+
+- name: Debug api_key_secret
+  debug:
+    var: api_key_secret.state.secret_value
+
+- name: Write API key to backend .env
+  copy:
+    content: "API_KEY={{ api_key_secret.state.secret_value }}"
+    dest: "/home/stepan/WebApp/ansible/playbooks/roles/backend_deploy/templates/.env"
+    owner: root
+    group: root
+    mode: 0644

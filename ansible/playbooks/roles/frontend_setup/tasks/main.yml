@@ -1,0 +1,95 @@
+- name: Install required dependencies
+  apt:
+    name:
+      - curl
+      - build-essential
+      - libssl-dev
+      - nginx
+    state: present
+
+- name: Install nvm (Node Version Manager)
+  shell: |
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+  args:
+    creates: /usr/local/bin/nvm
+
+- name: Source nvm script and install Node.js
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm install 16
+  args:
+    creates: "$HOME/.nvm/versions/node"
+
+- name: Copy Nginx configuration for React app
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/react_app
+
+- name: Enable Nginx site
+  file:
+    src: /etc/nginx/sites-available/react_app
+    dest: /etc/nginx/sites-enabled/react_app
+    state: link
+
+- name: Download nginx-prometheus-exporter binary to remote server
+  get_url:
+    url: "https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v1.4.0/nginx-prometheus-exporter_1.4.0_linux_amd64.tar.gz"
+    dest: "/tmp/nginx-prometheus-exporter_1.4.0_linux_amd64.tar.gz"
+
+- name: Extract nginx-prometheus-exporter binary
+  unarchive:
+    src: "/tmp/nginx-prometheus-exporter_1.4.0_linux_amd64.tar.gz"
+    dest: "/usr/local/bin/"
+    remote_src: yes
+    creates: "/usr/local/bin/nginx-prometheus-exporter"
+
+- name: Make the binary executable
+  file:
+    path: /usr/local/bin/nginx-prometheus-exporter
+    mode: '0755'
+
+- name: Ensure /etc/nginx-prometheus-exporter directory exists
+  file:
+    path: /etc/nginx-prometheus-exporter
+    state: directory
+    mode: '0755'
+
+- name: Create nginx-prometheus-exporter configuration file
+  copy:
+    content: |
+      daemonize: "false"
+      nginx_scrape_uri: "http://localhost:8080/stub_status"
+    dest: "/etc/nginx-prometheus-exporter/config.yml"
+
+- name: Create systemd service file for nginx-prometheus-exporter
+  copy:
+    content: |
+      [Unit]
+      Description=Nginx Prometheus Exporter
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/local/bin/nginx-prometheus-exporter -nginx.scrape-uri=http://localhost:8080/stub_status
+      Restart=always
+      User=www-data
+      Group=www-data
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/nginx-prometheus-exporter.service
+    mode: '0644'
+
+- name: Reload systemd to recognize the new service
+  systemd:
+    daemon_reload: yes
+
+- name: Restart Nginx to apply changes
+  service:
+    name: nginx
+    state: restarted
+
+- name: Start nginx-prometheus-exporter service
+  systemd:
+    name: nginx-prometheus-exporter
+    enabled: yes
+    state: started
