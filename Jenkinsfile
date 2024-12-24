@@ -30,7 +30,7 @@ pipeline {
         stage('Azure Login') {
             steps {
                 withCredentials([file(credentialsId: 'terraform-vars', variable: 'TFVARS_FILE')]) {
-                    dir('terraform')
+                    dir('terraform') {
                         // Читаем содержимое файла terraform.tfvars
                         def tfvarsContent = readFile("${TFVARS_FILE}")
                         
