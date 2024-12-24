@@ -12,7 +12,10 @@ pipeline {
             steps {
                 dir('terraform') {
                     withCredentials([file(credentialsId: 'terraform-vars', variable: 'TFVARS_FILE')]) {
-                        sh "cp ${TFVARS_FILE} ./terraform.tfvars"
+                        sh """
+                            cp ${TFVARS_FILE} ./terraform.tfvars
+                            chmod 644 ./terraform.tfvars
+                        """
                     }
                 }
             }
