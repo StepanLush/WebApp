@@ -13,7 +13,7 @@ pipeline {
                 dir('terraform') {
                     withCredentials([file(credentialsId: 'terraform-vars', variable: 'TFVARS_FILE')]) {
                         sh """
-                            export TFVARS_CONTENT=\$(cat ${TFVARS_FILE})
+                            cp ${TFVARS_FILE} terraform.tfvars
                         """
                     }
                 }
@@ -23,7 +23,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir('terraform') {
-                    sh 'terraform init -var-file=<(echo "$TFVARS_CONTENT")'
+                    sh 'terraform init -var-file=terraform.tfvars'
                 }
             }
         }
@@ -39,7 +39,7 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 dir('terraform') {
-                    sh 'terraform plan -out=tfplan -var-file=<(echo "$TFVARS_CONTENT")'
+                    sh 'terraform plan -out=tfplan -var-file=terraform.tfvars'
                 }
             }
         }
@@ -47,7 +47,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir('terraform') {
-                    sh 'terraform apply -auto-approve -var-file=<(echo "$TFVARS_CONTENT")'
+                    sh 'terraform apply -auto-approve -var-file=terraform.tfvars'
                 }
             }
         }
