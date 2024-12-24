@@ -14,7 +14,6 @@ pipeline {
                     withCredentials([file(credentialsId: 'terraform-vars', variable: 'TFVARS_FILE')]) {
                         sh """
                             export TFVARS_CONTENT=\$(cat ${TFVARS_FILE})
-                            terraform init -var 'var_name=\${TFVARS_CONTENT}'
                         """
                     }
                 }
