@@ -1,6 +1,13 @@
 pipeline {
     agent any
 
+    environment {
+        ARM_CLIENT_ID = ''
+        ARM_CLIENT_SECRET = ''
+        ARM_TENANT_ID = ''
+        ARM_SUBSCRIPTION_ID = ''
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -14,6 +21,28 @@ pipeline {
                     withCredentials([file(credentialsId: 'terraform-vars', variable: 'TFVARS_FILE')]) {
                         sh """
                             cp ${TFVARS_FILE} terraform.tfvars
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Azure Login') {
+            steps {
+                withCredentials([file(credentialsId: 'terraform-vars', variable: 'TFVARS_FILE')]) {
+                    dir('terraform')
+                        // Читаем содержимое файла terraform.tfvars
+                        def tfvarsContent = readFile("${TFVARS_FILE}")
+                        
+                        // Извлекаем значения переменных из файла tfvars
+                        def clientId = (tfvarsContent =~ /ARM_CLIENT_ID\s*=\s*"([^"]+)"/)[0][1]
+                        def clientSecret = (tfvarsContent =~ /ARM_CLIENT_SECRET\s*=\s*"([^"]+)"/)[0][1]
+                        def tenantId = (tfvarsContent =~ /ARM_TENANT_ID\s*=\s*"([^"]+)"/)[0][1]
+                        def subscriptionId = (tfvarsContent =~ /ARM_SUBSCRIPTION_ID\s*=\s*"([^"]+)"/)[0][1]
+                        
+                        // Выполняем команду az login с извлеченными значениями
+                        sh """
+                            az login --service-principal --username ${clientId} --password ${clientSecret} --tenant ${tenantId}
                         """
                     }
                 }
