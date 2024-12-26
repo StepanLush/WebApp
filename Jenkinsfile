@@ -2,10 +2,6 @@ pipeline {
     agent any
 
     environment {
-        ARM_CLIENT_ID = ''
-        ARM_CLIENT_SECRET = ''
-        ARM_TENANT_ID = ''
-        ARM_SUBSCRIPTION_ID = ''
     }
 
     stages {
@@ -27,26 +23,16 @@ pipeline {
             }
         }
 
-        stage('Azure Login') {
+        stage('Load Credentials') {
             steps {
-                withCredentials([file(credentialsId: 'terraform-vars', variable: 'TFVARS_FILE')]) {
+                withCredentials([
+                    string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
+                    string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
+                    string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID'),
+                    string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID')
+                ]) {
                     script {
-                        // Читаем содержимое файла terraform.tfvars
-                        def tfvarsContent = readFile("${TFVARS_FILE}")
-                        
-                        // Извлекаем значения переменных из файла tfvars с помощью регулярных выражений
-                        def clientId = (tfvarsContent =~ /ARM_CLIENT_ID\s*=\s*"([^"]+)"/)[0][1]
-                        def clientSecret = (tfvarsContent =~ /ARM_CLIENT_SECRET\s*=\s*"([^"]+)"/)[0][1]
-                        def tenantId = (tfvarsContent =~ /ARM_TENANT_ID\s*=\s*"([^"]+)"/)[0][1]
-                        def subscriptionId = (tfvarsContent =~ /ARM_SUBSCRIPTION_ID\s*=\s*"([^"]+)"/)[0][1]
-
-                        // Устанавливаем переменные окружения для использования в Terraform
-                        env.ARM_CLIENT_ID = clientId
-                        env.ARM_CLIENT_SECRET = clientSecret
-                        env.ARM_TENANT_ID = tenantId
-                        env.ARM_SUBSCRIPTION_ID = subscriptionId
-
-                        
+                        echo "Using Azure credentials for authentication"
                     }
                 }
             }
