@@ -65,7 +65,7 @@ pipeline {
                 //     // Создаем директорию, если её нет
                 //     sh 'mkdir -p $WORK_DIR'
                 // }
-                withCredentials([string(credentialsId: 'ANSIBLE_FETCH_MAIN_YML', variable: 'FETCH_MAIN_YML_CONTENT')]) {
+                withCredentials([file(credentialsId: 'ANSIBLE_FETCH_MAIN_YML', variable: 'FETCH_MAIN_YML_CONTENT')]) {
                     script {
                         writeFile file: "/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml", text: FETCH_MAIN_YML_CONTENT
                     }
