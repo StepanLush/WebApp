@@ -34,17 +34,19 @@ pipeline {
                         // Читаем содержимое файла terraform.tfvars
                         def tfvarsContent = readFile("${TFVARS_FILE}")
                         
-                        // Извлекаем значения переменных из файла tfvars
+                        // Извлекаем значения переменных из файла tfvars с помощью регулярных выражений
                         def clientId = (tfvarsContent =~ /ARM_CLIENT_ID\s*=\s*"([^"]+)"/)[0][1]
                         def clientSecret = (tfvarsContent =~ /ARM_CLIENT_SECRET\s*=\s*"([^"]+)"/)[0][1]
                         def tenantId = (tfvarsContent =~ /ARM_TENANT_ID\s*=\s*"([^"]+)"/)[0][1]
                         def subscriptionId = (tfvarsContent =~ /ARM_SUBSCRIPTION_ID\s*=\s*"([^"]+)"/)[0][1]
 
-                        // Устанавливаем эти переменные окружения для использования в Terraform
+                        // Устанавливаем переменные окружения для использования в Terraform
                         env.ARM_CLIENT_ID = clientId
                         env.ARM_CLIENT_SECRET = clientSecret
                         env.ARM_TENANT_ID = tenantId
                         env.ARM_SUBSCRIPTION_ID = subscriptionId
+
+                        
                     }
                 }
             }
