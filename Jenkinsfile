@@ -39,11 +39,12 @@ pipeline {
                         def clientSecret = (tfvarsContent =~ /ARM_CLIENT_SECRET\s*=\s*"([^"]+)"/)[0][1]
                         def tenantId = (tfvarsContent =~ /ARM_TENANT_ID\s*=\s*"([^"]+)"/)[0][1]
                         def subscriptionId = (tfvarsContent =~ /ARM_SUBSCRIPTION_ID\s*=\s*"([^"]+)"/)[0][1]
-                        
-                        // Выполняем команду az login с извлеченными значениями
-                        sh """
-                            az login --service-principal --username ${clientId} --password ${clientSecret} --tenant ${tenantId}
-                        """
+
+                        // Устанавливаем эти переменные окружения для использования в Terraform
+                        env.ARM_CLIENT_ID = clientId
+                        env.ARM_CLIENT_SECRET = clientSecret
+                        env.ARM_TENANT_ID = tenantId
+                        env.ARM_SUBSCRIPTION_ID = subscriptionId
                     }
                 }
             }
