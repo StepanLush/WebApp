@@ -8,7 +8,7 @@ module "backend_vms" {
   vm_size             = "Standard_B1s"
   admin_username      = var.admin_username
   admin_password      = var.admin_password
-  ssh_public_key      = file("~/.ssh/id_rsa.pub")
+  ssh_public_key      = var.ssh_public_key //file("~/.ssh/id_rsa.pub")
 }
 
 module "frontend_vm" {
@@ -20,7 +20,7 @@ module "frontend_vm" {
   vm_size             = "Standard_B1s"
   admin_username      = var.admin_username
   admin_password      = var.admin_password
-  ssh_public_key      = file("~/.ssh/id_rsa.pub")
+  ssh_public_key      = var.ssh_public_key //file("~/.ssh/id_rsa.pub")
 }
 
 module "monitoring_vm" {
@@ -32,7 +32,7 @@ module "monitoring_vm" {
   vm_size             = "Standard_B1s"
   admin_username      = var.admin_username
   admin_password      = var.admin_password
-  ssh_public_key      = file("~/.ssh/id_rsa.pub")
+  ssh_public_key      = var.ssh_public_key //file("~/.ssh/id_rsa.pub")
 }
 
 locals {
