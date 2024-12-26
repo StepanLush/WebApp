@@ -36,6 +36,11 @@ pipeline {
                     string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID')
                 ]) {
                     script {
+                        az logout
+                        export ARM_CLIENT_ID=$ARM_CLIENT_ID
+                        export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
+                        export ARM_TENANT_ID=$ARM_TENANT_ID
+                        export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
                         echo "Using Azure credentials for authentication"
                     }
                 }
@@ -73,40 +78,6 @@ pipeline {
                 }
             }
         }
-
-    //     stage('Ansible - Retrieve Secrets') {
-    //         steps {
-    //             script {
-    //                 // Запуск playbook для получения секретов из Key Vault
-    //                 ansiblePlaybook(
-    //                     playbook: 'ansible/retrieve_secrets.yml',
-    //                     inventory: 'inventory/servers.ini'
-    //                 )
-    //             }
-    //         }
-    //     }
-
-    //     stage('Ansible - Deploy') {
-    //         steps {
-    //             script {
-    //                 // Запуск playbook для конфигурации и деплоя приложения
-    //                 ansiblePlaybook(
-    //                     playbook: 'ansible/deploy.yml',
-    //                     inventory: 'inventory/servers.ini'
-    //                 )
-    //             }
-    //         }
-    //     }
-
-    //     stage('Notify Success') {
-    //         steps {
-    //             script {
-    //                 // Отправка уведомления об успешном деплое
-    //                 echo "Deployment completed successfully!"
-    //                 // Можно использовать Slack, Email или другие уведомления
-    //             }
-    //         }
-    //     }
     }
 
     post {
