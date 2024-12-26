@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        ARM_CLIENT_ID = ''
-        ARM_CLIENT_SECRET = ''
-        ARM_TENANT_ID = ''
-        ARM_SUBSCRIPTION_ID = ''
+        ARM_CLIENT_ID = credentials('ARM_CLIENT_ID')
+        ARM_CLIENT_SECRET = credentials('ARM_CLIENT_SECRET')
+        ARM_TENANT_ID = credentials('ARM_TENANT_ID')
+        ARM_SUBSCRIPTION_ID = credentials('ARM_SUBSCRIPTION_ID')
     }
 
     stages {
@@ -27,25 +27,6 @@ pipeline {
             }
         }
 
-        stage('Load Credentials') {
-            steps {
-                withCredentials([
-                    string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'),
-                    string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'),
-                    string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID'),
-                    string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID')
-                ]) {
-                    script {
-                        az logout
-                        export ARM_CLIENT_ID=$ARM_CLIENT_ID
-                        export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
-                        export ARM_TENANT_ID=$ARM_TENANT_ID
-                        export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
-                        echo "Using Azure credentials for authentication"
-                    }
-                }
-            }
-        }
 
         stage('Terraform Init') {
             steps {
