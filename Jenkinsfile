@@ -27,7 +27,6 @@ pipeline {
             }
         }
 
-
         stage('Terraform Init') {
             steps {
                 dir('terraform') {
@@ -59,7 +58,42 @@ pipeline {
                 }
             }
         }
+
+        stage('Prepare Environment') {
+            steps {
+                // script {
+                //     // Создаем директорию, если её нет
+                //     sh 'mkdir -p $WORK_DIR'
+                // }
+                withCredentials([string(credentialsId: 'ANSIBLE_FETCH_MAIN_YML', variable: 'FETCH_MAIN_YML_CONTENT')]) {
+                    script {
+                        writeFile file: "/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml", text: FETCH_MAIN_YML_CONTENT
+                    }
+                }
+            }
+        }
+
+        stage('Fetch Secrets') {
+            steps {
+                script {
+                    sh '''
+                    ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml
+                    '''
+                }
+            }
+        }
+
+        stage('Setup and deploy with Ansible') {
+            steps {
+                script {
+                    sh '''
+                    ansible-playbook -i ansible/hosts ansible/playbooks/site.yml
+                    '''
+                }
+            }
+        }
     }
+
 
     post {
         failure {

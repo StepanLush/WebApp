@@ -19,8 +19,8 @@
   copy:
     content: "{{ ansible_inventory_secret.state.secret_value }}"
     dest: "/home/stepan/WebApp/ansible/hosts"
-    owner: root
-    group: root
+    owner: stepan
+    group: stepan
     mode: 0644
 
 - name: Fetch targets_vms_ips from Key Vault
@@ -39,8 +39,8 @@
   copy:
     content: "{{ targets_vms_ips.state.secret_value }}"
     dest: "/home/stepan/WebApp/ansible/playbooks/roles/monitoring_install/vars/main.yml"
-    owner: root
-    group: root
+    owner: stepan
+    group: stepan
     mode: 0644
 
 - name: Fetch Load Balancer IP from Key Vault
@@ -63,8 +63,8 @@
   copy:
     content: "REACT_APP_API_URL=http://{{ lb_ip_secret.state.secret_value }}"
     dest: "/home/stepan/WebApp/ansible/playbooks/roles/frontend_deploy/templates/.env"
-    owner: root
-    group: root
+    owner: stepan
+    group: stepan
     mode: 0644
 
 - name: Fetch API key from Key Vault
@@ -87,6 +87,6 @@
   copy:
     content: "API_KEY={{ api_key_secret.state.secret_value }}"
     dest: "/home/stepan/WebApp/ansible/playbooks/roles/backend_deploy/templates/.env"
-    owner: root
-    group: root
+    owner: stepan
+    group: stepan
     mode: 0644
