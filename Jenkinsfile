@@ -70,6 +70,10 @@ pipeline {
 
         stage('Prepare Environment') {
             steps {
+                script {
+                    // Создаем директорию, если её нет
+                    sh 'mkdir -p $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/'
+                }
                 withCredentials([file(credentialsId: 'ANSIBLE_FETCH_MAIN_YML', variable: 'FETCH_MAIN_YML_CONTENT')]) {
                     sh """
                         cp ${FETCH_MAIN_YML_CONTENT} $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
