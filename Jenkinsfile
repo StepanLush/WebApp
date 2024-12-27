@@ -43,6 +43,14 @@ pipeline {
             }
         }
 
+        stage('Terraform Refresh') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform refresh'
+                }
+            }
+        }
+
         stage('Terraform Plan') {
             steps {
                 dir('terraform') {
@@ -66,9 +74,9 @@ pipeline {
                 //     sh 'mkdir -p $WORK_DIR'
                 // }
                 withCredentials([file(credentialsId: 'ANSIBLE_FETCH_MAIN_YML', variable: 'FETCH_MAIN_YML_CONTENT')]) {
-                    script {
-                        writeFile file: "/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml", text: FETCH_MAIN_YML_CONTENT
-                    }
+                    sh """
+                        cp ${FETCH_MAIN_YML_CONTENT} /ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
+                    """
                 }
             }
         }
