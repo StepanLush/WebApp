@@ -6,6 +6,7 @@ pipeline {
         ARM_CLIENT_SECRET = credentials('ARM_CLIENT_SECRET')
         ARM_TENANT_ID = credentials('ARM_TENANT_ID')
         ARM_SUBSCRIPTION_ID = credentials('ARM_SUBSCRIPTION_ID')
+        WORK_DIR = "${WORKSPACE}/ansible"
     }
 
     stages {
@@ -69,13 +70,9 @@ pipeline {
 
         stage('Prepare Environment') {
             steps {
-                // script {
-                //     // Создаем директорию, если её нет
-                //     sh 'mkdir -p $WORK_DIR'
-                // }
                 withCredentials([file(credentialsId: 'ANSIBLE_FETCH_MAIN_YML', variable: 'FETCH_MAIN_YML_CONTENT')]) {
                     sh """
-                        cp ${FETCH_MAIN_YML_CONTENT} /ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        cp ${FETCH_MAIN_YML_CONTENT} $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
                     """
                 }
             }
