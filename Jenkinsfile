@@ -86,9 +86,9 @@ pipeline {
 
                     sh """
                         echo 'ansible_inventory_dest: $WORK_DIR/hosts' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'targets_vms_ips_dest: $WORK_DIR/playbooks/roles/monitoring_install/vars/main.yml' >> $WORK_DIR/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'frontend_env_dest: $WORK_DIR/playbooks/roles/frontend_deploy/templates/.env' >> $WORK_DIR/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'backend_env_dest: $WORK_DIR/playbooks/roles/backend_deploy/templates/.env' >> $WORK_DIR/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'targets_vms_ips_dest: $WORK_DIR/playbooks/roles/monitoring_install/vars/main.yml' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'frontend_env_dest: $WORK_DIR/playbooks/roles/frontend_deploy/templates/.env' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'backend_env_dest: $WORK_DIR/playbooks/roles/backend_deploy/templates/.env' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
                     """
                 }
             }
