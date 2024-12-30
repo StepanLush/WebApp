@@ -80,10 +80,10 @@ pipeline {
                     }
 
                     sh """
-                        echo 'ansible_inventory_dest: \$WORK_DIR/hosts' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'targets_vms_ips_dest: \$WORK_DIR/playbooks/roles/monitoring_install/vars/main.yml' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'frontend_env_dest: \$WORK_DIR/playbooks/roles/frontend_deploy/templates/.env' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'backend_env_dest: \$WORK_DIR/playbooks/roles/backend_deploy/templates/.env' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'ansible_inventory_dest: \$WORK_DIR/hosts' >> \$WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'targets_vms_ips_dest: \$WORK_DIR/playbooks/roles/monitoring_install/vars/main.yml' >> \$WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'frontend_env_dest: \$WORK_DIR/playbooks/roles/frontend_deploy/templates/.env' >> \$WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'backend_env_dest: \$WORK_DIR/playbooks/roles/backend_deploy/templates/.env' >> \$WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
                     """
                 }
             }
@@ -93,9 +93,6 @@ pipeline {
             steps {
                 script {
                     sh """
-                        whoami
-                        pwd
-                        ls -la
                         sudo -S ls -la /home/stepan/ansible_azure_venv/bin/activate
                         sudo bash -i -c 'source /home/stepan/ansible_azure_venv/bin/activate && ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml'
                     """
@@ -107,7 +104,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    ansible-playbook -i ansible/hosts ansible/playbooks/site.yml
+                        ansible-playbook -i ansible/hosts ansible/playbooks/site.yml
                     '''
                 }
             }
