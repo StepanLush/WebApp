@@ -64,12 +64,12 @@ pipeline {
             steps {
                 dir('terraform') {
                     script {
-                        def sshKey = sh(script: 'cat /var/lib/jenkins/.ssh/jenkins_id_rsa.pub', returnStdout: true).trim()
+                        // def sshKey = sh(script: 'cat /var/lib/jenkins/.ssh/jenkins_id_rsa.pub', returnStdout: true).trim()
 
                         sh """
                             terraform apply -auto-approve \
-                            -var-file=terraform.tfvars \
-                            -var 'ssh_public_key=${sshKey}'
+                            -var-file=terraform.tfvars #\
+                            #-var 'ssh_public_key=${sshKey}'
                         """
                     }
                 }
@@ -115,10 +115,8 @@ pipeline {
 
         stage('Setup and deploy with Ansible') {
             steps {
-                script {
-                    sh '''
-                        ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible/hosts ansible/playbooks/site.yml
-                    '''
+                sshagent(['jenkins-ssh-key']) {
+                    sh 'ansible-playbook -i inventory playbook.yml'
                 }
             }
         }
