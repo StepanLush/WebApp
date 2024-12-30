@@ -90,7 +90,6 @@ pipeline {
                         pwd
                         ls -la
                         sudo -S ls -la /home/stepan/ansible_azure_venv/bin/activate
-                        sudo -S . /home/stepan/ansible_azure_venv/bin/activate
                         sudo -S ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
                     """
                 }
