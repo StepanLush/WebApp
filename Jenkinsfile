@@ -86,8 +86,11 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    . /home/stepan/ansible_azure_venv/bin/activate
-                    ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
+                        whoami
+                        pwd
+                        ls -la
+                        . /home/stepan/ansible_azure_venv/bin/activate
+                        ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
                     '''
                 }
             }
