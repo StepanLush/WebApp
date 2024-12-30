@@ -80,10 +80,10 @@ pipeline {
                     }
 
                     sh """
-                        echo 'ansible_inventory_dest: \$WORK_DIR/hosts' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'targets_vms_ips_dest: \$WORK_DIR/playbooks/roles/monitoring_install/vars/main.yml' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'frontend_env_dest: \$WORK_DIR/playbooks/roles/frontend_deploy/templates/.env' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'backend_env_dest: \$WORK_DIR/playbooks/roles/backend_deploy/templates/.env' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'ansible_inventory_dest: /var/lib/jenkins/workspace/WebAppPipeline/ansible/hosts' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'targets_vms_ips_dest: /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/roles/monitoring_install/vars/main.yml' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'frontend_env_dest: /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/roles/frontend_deploy/templates/.env' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'backend_env_dest: /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/roles/backend_deploy/templates/.env' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
                     """
                 }
             }
