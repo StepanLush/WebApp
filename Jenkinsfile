@@ -7,6 +7,7 @@ pipeline {
         ARM_TENANT_ID = credentials('ARM_TENANT_ID')
         ARM_SUBSCRIPTION_ID = credentials('ARM_SUBSCRIPTION_ID')
         WORK_DIR = "${WORKSPACE}/ansible"
+        SUDO_PASSWORD = credentials('sudo-password')
     }
 
     stages {
@@ -89,10 +90,10 @@ pipeline {
                         whoami
                         pwd
                         ls -la
-                        ls -la /home/stepan/ansible_azure_venv/bin/activate
+                        echo '${SUDO_PASSWORD}' | sudo -S ls -la /home/stepan/ansible_azure_venv/bin/activate
                         sleep 10000
-                        . /home/stepan/ansible_azure_venv/bin/activate
-                        ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
+                        echo '${SUDO_PASSWORD}' | sudo -S . /home/stepan/ansible_azure_venv/bin/activate
+                        echo '${SUDO_PASSWORD}' | sudo -S ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
                     '''
                 }
             }
