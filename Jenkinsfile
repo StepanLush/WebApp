@@ -85,15 +85,15 @@ pipeline {
         stage('Fetch Secrets') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'sudo-password', variable: 'SUDO_PASSWORD')]){
+                    withCredentials([string(credentialsId: 'sudo-password', variable: 'SUDO_PASSWORD')]) {
                         sh """
                             whoami
                             pwd
                             ls -la
-                            echo '${SUDO_PASSWORD}' | sudo -S ls -la /home/stepan/ansible_azure_venv/bin/activate
+                            echo \$SUDO_PASSWORD | sudo -S ls -la /home/stepan/ansible_azure_venv/bin/activate
                             sleep 10000
-                            echo '${SUDO_PASSWORD}' | sudo -S . /home/stepan/ansible_azure_venv/bin/activate
-                            echo '${SUDO_PASSWORD}' | sudo -S ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
+                            echo \$SUDO_PASSWORD | sudo -S . /home/stepan/ansible_azure_venv/bin/activate
+                            echo \$SUDO_PASSWORD | sudo -S ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
                         """
                     }
                 }
