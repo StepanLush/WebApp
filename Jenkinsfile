@@ -63,7 +63,15 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir('terraform') {
-                    sh 'terraform apply -auto-approve -var-file=terraform.tfvars'
+                    script {
+                        def sshKey = sh(script: 'cat /var/lib/jenkins/.ssh/jenkins_id_rsa.pub', returnStdout: true).trim()
+
+                        sh """
+                            terraform apply -auto-approve \
+                            -var-file=terraform.tfvars \
+                            -var 'ssh_public_key=${sshKey}'
+                        """
+                    }
                 }
             }
         }
