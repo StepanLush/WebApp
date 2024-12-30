@@ -89,6 +89,8 @@ pipeline {
                         whoami
                         pwd
                         ls -la
+                        ls -la /home/stepan/ansible_azure_venv/bin/activate
+                        sleep 10000
                         . /home/stepan/ansible_azure_venv/bin/activate
                         ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
                     '''
