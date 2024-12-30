@@ -71,7 +71,12 @@ pipeline {
         stage('Prepare Environment') {
             steps {
                 script {
-                    sh 'mkdir -p $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/'
+                    sh """
+                        mkdir -p $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/
+                        mkdir -p $WORK_DIR/playbooks/roles/monitoring_install/vars/
+                        mkdir -p $WORK_DIR/playbooks/roles/frontend_deploy/templates/                    
+                        mkdir -p $WORK_DIR/playbooks/roles/backend_deploy/templates/
+                    """
                 
                     withCredentials([file(credentialsId: 'ANSIBLE_FETCH_MAIN_YML', variable: 'FETCH_MAIN_YML_CONTENT')]) {
                         sh """
@@ -80,10 +85,10 @@ pipeline {
                     }
 
                     sh """
-                        echo 'ansible_inventory_dest: /var/lib/jenkins/workspace/WebAppPipeline/ansible/hosts' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'targets_vms_ips_dest: /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/roles/monitoring_install/vars/main.yml' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'frontend_env_dest: /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/roles/frontend_deploy/templates/.env' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
-                        echo 'backend_env_dest: /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/roles/backend_deploy/templates/.env' >> /var/lib/jenkins/workspace/WebAppPipeline/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'ansible_inventory_dest: $WORK_DIR/hosts' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'targets_vms_ips_dest: $WORK_DIR/playbooks/roles/monitoring_install/vars/main.yml' >> $WORK_DIR/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'frontend_env_dest: $WORK_DIR/playbooks/roles/frontend_deploy/templates/.env' >> $WORK_DIR/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'backend_env_dest: $WORK_DIR/playbooks/roles/backend_deploy/templates/.env' >> $WORK_DIR/ansible/playbooks/fetch/fetch_secrets/defaults/main.yml
                     """
                 }
             }
