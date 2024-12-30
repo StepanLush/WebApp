@@ -86,7 +86,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml
+                    ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
                     '''
                 }
             }
