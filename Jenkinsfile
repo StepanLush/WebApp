@@ -85,7 +85,7 @@ pipeline {
         stage('Fetch Secrets') {
             steps {
                 script {
-                    withCredentials(string[credentialsId: 'sudo-password', variable: 'SUDO_PASSWORD'])
+                    withCredentials(string[credentialsId: 'sudo-password', variable: 'SUDO_PASSWORD']){
                         sh """
                             whoami
                             pwd
@@ -95,6 +95,7 @@ pipeline {
                             echo '${SUDO_PASSWORD}' | sudo -S . /home/stepan/ansible_azure_venv/bin/activate
                             echo '${SUDO_PASSWORD}' | sudo -S ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
                         """
+                    }
                 }
             }
         }
