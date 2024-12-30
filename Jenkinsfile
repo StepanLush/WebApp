@@ -87,6 +87,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'sudo-password', variable: 'SUDO_PASSWORD')]) {
                         sh """
+                            echo "Environment variable SUDO_PASSWORD: \$SUDO_PASSWORD"
                             whoami
                             pwd
                             ls -la
