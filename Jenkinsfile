@@ -85,7 +85,7 @@ pipeline {
         stage('Fetch Secrets') {
             steps {
                 script {
-                    withCredentials(string[credentialsId: 'sudo-password', variable: 'SUDO_PASSWORD']){
+                    withCredentials([string(credentialsId: 'sudo-password', variable: 'SUDO_PASSWORD')]){
                         sh """
                             whoami
                             pwd
