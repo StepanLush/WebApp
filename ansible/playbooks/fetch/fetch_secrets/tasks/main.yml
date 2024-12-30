@@ -18,7 +18,7 @@
 - name: Write Ansible inventory to file
   copy:
     content: "{{ ansible_inventory_secret.state.secret_value }}"
-    dest: "/home/stepan/WebApp/ansible/hosts"
+    dest: "{{ ansible_inventory_dest }}"
     owner: stepan
     group: stepan
     mode: 0644
@@ -38,7 +38,7 @@
 - name: Write targets_vms_ips to file
   copy:
     content: "{{ targets_vms_ips.state.secret_value }}"
-    dest: "/home/stepan/WebApp/ansible/playbooks/roles/monitoring_install/vars/main.yml"
+    dest: "{{ targets_vms_ips_dest }}"
     owner: stepan
     group: stepan
     mode: 0644
@@ -62,7 +62,7 @@
 - name: Write Load Balancer IP to frontend .env
   copy:
     content: "REACT_APP_API_URL=http://{{ lb_ip_secret.state.secret_value }}"
-    dest: "/home/stepan/WebApp/ansible/playbooks/roles/frontend_deploy/templates/.env"
+    dest: "{{ frontend_env_dest }}"
     owner: stepan
     group: stepan
     mode: 0644
@@ -86,7 +86,7 @@
 - name: Write API key to backend .env
   copy:
     content: "API_KEY={{ api_key_secret.state.secret_value }}"
-    dest: "/home/stepan/WebApp/ansible/playbooks/roles/backend_deploy/templates/.env"
+    dest: "{{ backend_env_dest }}"
     owner: stepan
     group: stepan
     mode: 0644

@@ -71,12 +71,19 @@ pipeline {
         stage('Prepare Environment') {
             steps {
                 script {
-                    // Создаем директорию, если её нет
                     sh 'mkdir -p $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/'
-                }
-                withCredentials([file(credentialsId: 'ANSIBLE_FETCH_MAIN_YML', variable: 'FETCH_MAIN_YML_CONTENT')]) {
+                
+                    withCredentials([file(credentialsId: 'ANSIBLE_FETCH_MAIN_YML', variable: 'FETCH_MAIN_YML_CONTENT')]) {
+                        sh """
+                            cp ${FETCH_MAIN_YML_CONTENT} $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        """
+                    }
+
                     sh """
-                        cp ${FETCH_MAIN_YML_CONTENT} $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'ansible_inventory_dest: \$WORK_DIR/hosts' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'targets_vms_ips_dest: \$WORK_DIR/playbooks/roles/monitoring_install/vars/main.yml' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'frontend_env_dest: \$WORK_DIR/playbooks/roles/frontend_deploy/templates/.env' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
+                        echo 'backend_env_dest: \$WORK_DIR/playbooks/roles/backend_deploy/templates/.env' >> $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/main.yml
                     """
                 }
             }
