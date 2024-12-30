@@ -117,7 +117,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        ansible-playbook -i ansible/hosts ansible/playbooks/site.yml
+                        ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible/hosts ansible/playbooks/site.yml
                     '''
                 }
             }
