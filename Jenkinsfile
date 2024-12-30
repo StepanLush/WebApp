@@ -86,7 +86,7 @@ pipeline {
         stage('Fetch Secrets') {
             steps {
                 script {
-                    sh '''
+                    sh """
                         whoami
                         pwd
                         ls -la
@@ -94,7 +94,7 @@ pipeline {
                         sleep 10000
                         echo '${SUDO_PASSWORD}' | sudo -S . /home/stepan/ansible_azure_venv/bin/activate
                         echo '${SUDO_PASSWORD}' | sudo -S ansible-playbook ansible/playbooks/fetch/fetch_secrets.yml -vvv
-                    '''
+                    """
                 }
             }
         }
