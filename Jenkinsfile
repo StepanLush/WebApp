@@ -116,7 +116,7 @@ pipeline {
             steps {
                 sshagent(['jenkins-ssh-key']) {
                     sh """
-                        ansible-playbook -i $WORK_DIR/hosts $WORK_DIR/playbooks/site.yml -vvvv --ssh-common-args='-o StrictHostKeyChecking=no'
+                        ansible-playbook -i $WORK_DIR/hosts $WORK_DIR/playbooks/site.yml --ssh-common-args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
                     """
                 }
             }
