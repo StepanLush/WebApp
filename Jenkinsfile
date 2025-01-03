@@ -115,7 +115,9 @@ pipeline {
         stage('Setup and deploy with Ansible') {
             steps {
                 sshagent(['jenkins-ssh-key']) {
-                    sh 'ssh-add -v && ansible-playbook -i inventory playbook.yml -vvvv'
+                    sh """
+                        ssh-add -v && ansible-playbook -i host $WORK_DIR/playbooks/site.yml
+                    """
                 }
             }
         }
