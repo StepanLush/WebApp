@@ -116,7 +116,7 @@ pipeline {
             steps {
                 sshagent(['jenkins-ssh-key']) {
                     sh """
-                        ssh-add -v && ansible-playbook -i host $WORK_DIR/playbooks/site.yml
+                        ssh-add -v && ansible-playbook -i $WORK_DIR/host $WORK_DIR/playbooks/site.yml
                     """
                 }
             }
