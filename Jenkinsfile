@@ -116,8 +116,7 @@ pipeline {
             steps {
                 sshagent(['jenkins-ssh-key']) {
                     sh """
-                        ssh-add -v || { echo "ssh-add failed"; exit 1; }
-                        ansible-playbook -i $WORK_DIR/hosts $WORK_DIR/playbooks/site.yml -vvvv
+                        ansible-playbook -i $WORK_DIR/hosts $WORK_DIR/playbooks/site.yml -vvvv --ssh-common-args='-o StrictHostKeyChecking=no
                     """
                 }
             }
