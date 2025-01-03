@@ -68,8 +68,7 @@ pipeline {
 
                         sh """
                             terraform apply -auto-approve \
-                            -var-file=terraform.tfvars #\
-                            #-var 'ssh_public_key=${sshKey}'
+                            -var-file=terraform.tfvars
                         """
                     }
                 }
@@ -82,7 +81,7 @@ pipeline {
                     sh """
                         mkdir -p $WORK_DIR/playbooks/fetch/fetch_secrets/defaults/
                         mkdir -p $WORK_DIR/playbooks/roles/monitoring_install/vars/
-                        mkdir -p $WORK_DIR/playbooks/roles/frontend_deploy/templates/                    
+                        mkdir -p $WORK_DIR/playbooks/roles/frontend_deploy/templates/
                         mkdir -p $WORK_DIR/playbooks/roles/backend_deploy/templates/
                     """
                 
@@ -128,14 +127,12 @@ pipeline {
             script {
                 // Отправка уведомлений в случае ошибки
                 echo "Pipeline failed"
-                // Здесь можно добавить отправку уведомлений о сбое (например, в Slack)
             }
         }
         success {
             script {
                 // Отправка уведомлений об успехе
                 echo "Pipeline succeeded"
-                // Также можно отправить уведомление о успешном выполнении
             }
         }
     }
