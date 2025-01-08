@@ -41,7 +41,7 @@ resource "azurerm_lb_rule" "http_frontend" {
   frontend_port                  = 80
   backend_port                   = 80
   frontend_ip_configuration_name = "lb-ip"
-  backend_address_pool_ids       = [azurerm_lb_frontend_address_pool.backend_pool.id]
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.frontend_pool.id]
   probe_id                       = azurerm_lb_probe.http_80.id
 }
 
@@ -52,7 +52,7 @@ resource "azurerm_lb_rule" "http_backend" {
   frontend_port                  = 3000
   backend_port                   = 3000
   frontend_ip_configuration_name = "lb-ip"
-  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.frontend_pool.id]
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.backend_pool.id]
   probe_id                       = azurerm_lb_probe.http_3000.id
 }
 
