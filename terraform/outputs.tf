@@ -20,7 +20,7 @@ output "targets_vms_ips" {
 }
 
 output "load_balancer_public_ip" {
-  value = azurerm_public_ip.frontend_public_ip.ip_address
+  value = azurerm_public_ip.lb_public_ip.ip_address
 }
 
 output "client_id" {

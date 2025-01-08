@@ -20,7 +20,7 @@ resource "azurerm_key_vault" "main" {
     secret_permissions = ["Get", "List"]
   }
 
-  depends_on = [azurerm_lb.backend]
+  depends_on = [azurerm_lb.lb]
 }
 
 resource "azurerm_key_vault_secret" "vms_ips" {
@@ -50,7 +50,7 @@ resource "azurerm_key_vault_secret" "targets_vms_ips" {
 
 resource "azurerm_key_vault_secret" "load_balancer_ip" {
   name         = "load-balancer-ip"
-  value        = azurerm_public_ip.frontend_public_ip.ip_address
+  value        = "${azurerm_public_ip.lb_public_ip.ip_address}/3000"
   key_vault_id = azurerm_key_vault.main.id
 }
 

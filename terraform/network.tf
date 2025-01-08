@@ -102,3 +102,10 @@ resource "azurerm_network_interface_backend_address_pool_association" "backend_n
   backend_address_pool_id = azurerm_lb_backend_address_pool.backend_pool.id
 }
 
+resource "azurerm_network_interface_backend_address_pool_association" "frontend_nic_association" {
+  count                   = length(local.frontend_nic_ids)
+  network_interface_id    = local.frontend_nic_ids[count.index]
+  ip_configuration_name   = "internal"
+  backend_address_pool_id = azurerm_lb_backend_address_pool.frontend_pool.id
+}
+
