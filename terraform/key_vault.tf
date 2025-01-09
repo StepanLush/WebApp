@@ -47,10 +47,10 @@ resource "azurerm_key_vault_secret" "targets_vms_ips" {
   ])
   key_vault_id = azurerm_key_vault.main.id
 }
-
+//дописал порт 3000 чтобы не переписывать логику fetch secrets Ansible
 resource "azurerm_key_vault_secret" "load_balancer_ip" {
   name         = "load-balancer-ip"
-  value        = "${azurerm_public_ip.lb_public_ip.ip_address}/3000"
+  value        = "${azurerm_public_ip.lb_public_ip.ip_address}:3000"
   key_vault_id = azurerm_key_vault.main.id
 }
 
