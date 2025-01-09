@@ -41,6 +41,6 @@ locals {
   ]
 
   frontend_nic_ids = [
-    for i in range(length(module.frontend_vm)) : module.frontend_vm[i].network_interface_id
+    for i in range(length(module.frontend_vm)) : module.frontend_vm.network_interface_id
   ]
 }
