@@ -35,7 +35,7 @@ resource "azurerm_lb_probe" "http_80" {
 }
 
 resource "azurerm_lb_rule" "http_frontend" {
-  name                           = "http-rule-backend"
+  name                           = "http-rule-frontend"
   loadbalancer_id                = azurerm_lb.lb.id
   protocol                       = "Tcp"
   frontend_port                  = 80
