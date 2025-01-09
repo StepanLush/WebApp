@@ -1,6 +1,5 @@
 server {
-    listen 80;
-    server_name _;
+    listen 80 default_server;
 
     root {{ frontend_app_path }};
     index index.html;
