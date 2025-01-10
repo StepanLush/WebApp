@@ -33,7 +33,10 @@ resource "azurerm_key_vault_secret" "vms_ips" {
     join("\n", module.backend_vms.*.public_ip),
     "",
     "[monitoring]",
-    module.monitoring_vm.public_ip
+    module.monitoring_vm.public_ip,
+    "",
+    "[load_balancer]",
+    azurerm_public_ip.lb_public_ip.ip_address
   ])
   key_vault_id = azurerm_key_vault.main.id
 }
