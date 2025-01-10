@@ -65,3 +65,7 @@ variable "ssh_public_key" {
   description = "The public SSH key to be added to the VM"
   type        = string
 }
+
+variable "environment" {
+  default = "development"
+}
