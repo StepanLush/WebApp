@@ -31,19 +31,21 @@ pipeline {
         stage('Check and Create Workspace') {
             steps {
                 dir('terraform') {
-                    def workspaceName = 'development'
-                    
-                    def workspaces = sh(script: 'terraform workspace list', returnStdout: true).trim().split("\n")
-                    
-                    // Проверяем, существует ли workspace
-                    if (!workspaces.contains("* ${workspaceName}")) {
-                        echo "Workspace '${workspaceName}' does not exist. Creating it now..."
-                        sh "terraform workspace new ${workspaceName}"
-                    } else {
-                        echo "Workspace '${workspaceName}' already exists."
+                    script {
+                        def workspaceName = 'development'
+                        
+                        def workspaces = sh(script: 'terraform workspace list', returnStdout: true).trim().split("\n")
+                        
+                        // Проверяем, существует ли workspace
+                        if (!workspaces.contains("* ${workspaceName}")) {
+                            echo "Workspace '${workspaceName}' does not exist. Creating it now..."
+                            sh "terraform workspace new ${workspaceName}"
+                        } else {
+                            echo "Workspace '${workspaceName}' already exists."
+                        }
+                        
+                        sh "terraform workspace select ${workspaceName}"
                     }
-                    
-                    sh "terraform workspace select ${workspaceName}"
                 }
             }
         }
